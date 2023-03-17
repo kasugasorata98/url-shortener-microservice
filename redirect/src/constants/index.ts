@@ -1,0 +1,17 @@
+export const Constants = {
+  ERROR_MESSAGE: {
+    SHORT_ID_NOT_FOUND: `shortId not found`,
+  },
+  HTTP_CODE: {
+    CREATED: 201,
+    INTERNAL_SERVER_ERROR: 500,
+    NOT_FOUND: 404,
+    MOVED_PERMANENTLY: 301,
+  },
+  MONGOOSE_ERROR_CODES: {
+    DUPLICATED: 11000,
+  },
+  EVENTS: {
+    ADD_TO_REDIRECT: 'ADD_TO_REDIRECT',
+  },
+}
