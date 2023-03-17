@@ -1,5 +1,5 @@
 {
-  "name": "generate",
+  "name": "redirect",
   "version": "1.0.0",
   "description": "Generates Short URLs",
   "main": "index.ts",
