@@ -4,7 +4,6 @@ import MongooseClient from './src/database/MongooseClient'
 import routes from './src/routes/index'
 import { config } from './src/configs'
 import logger from './src/logger'
-import EventController from './src/modules/event/event.controller'
 
 async function main() {
   const app = express()

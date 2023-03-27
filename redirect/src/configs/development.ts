@@ -6,9 +6,10 @@ const development = (): Config => {
     port: process.env.PORT || '',
     mongoDBString: process.env.MONGODB_CONNECTION_STRING || '',
     exchange: process.env.EXCHANGE || '',
-    redirectRoutingKey: process.env.REDIRECT_ROUTING_KEY || '',
     messageBrokerUrl: process.env.MESSAGE_BROKER_URL || '',
-    queue: process.env.QUEUE || '',
+    redirectQueue: process.env.REDIRECT_QUEUE || '',
+    redirectRoutingKey: process.env.REDIRECT_ROUTING_KEY || '',
+    reportRoutingKey: process.env.REPORT_ROUTING_KEY || '',
   }
 }
 

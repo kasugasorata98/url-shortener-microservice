@@ -13,5 +13,6 @@ export const Constants = {
   },
   EVENTS: {
     ADD_TO_REDIRECT: 'ADD_TO_REDIRECT',
+    ADD_TO_REPORT: 'ADD_TO_REPORT',
   },
 }

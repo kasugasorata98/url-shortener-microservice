@@ -12,6 +12,7 @@ export const Constants = {
     DUPLICATED: 11000,
   },
   EVENTS: {
-    ADD_TO_REDIRECT: 'ADD_TO_REDIRECT',
+    ADD_TO_REPORT: 'ADD_TO_REPORT',
+    CREATE_REPORT: 'CREATE_REPORT',
   },
 }

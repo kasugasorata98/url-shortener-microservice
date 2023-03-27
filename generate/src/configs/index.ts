@@ -10,8 +10,8 @@ export interface Config {
   port: string
   exchange: string
   redirectRoutingKey: string
+  reportRoutingKey: string
   messageBrokerUrl: string
-  queue: string
 }
 
 export const config = (() => {

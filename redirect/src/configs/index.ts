@@ -9,9 +9,10 @@ export interface Config {
   environment: string
   port: string
   exchange: string
-  redirectRoutingKey: string
   messageBrokerUrl: string
-  queue: string
+  redirectQueue: string
+  redirectRoutingKey: string
+  reportRoutingKey: string
 }
 
 export const config = (() => {
