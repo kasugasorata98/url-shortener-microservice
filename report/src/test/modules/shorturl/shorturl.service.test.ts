@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import ShortURLService from '../../../modules/redirect/shorturl.service'
-import shorturlModel from '../../../database/model/redirect_mapping.model'
+import shorturlModel from '../../../database/model/report.model'
 import { Utils } from '../../../utils'
 
 let mongoServer: MongoMemoryServer
