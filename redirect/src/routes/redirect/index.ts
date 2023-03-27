@@ -9,7 +9,9 @@ router.get('/:shortId', async (req: Request, res: Response) => {
   const logs = logger.createLogObject()
   try {
     const { shortId } = req.params
-    const redirectController = new RedirectController(shortId)
+    let ipAddress = req.ip
+    logs.traces.push({ ipAddress })
+    const redirectController = new RedirectController(shortId, ipAddress)
     const targetUrl = await redirectController.getTargetURL()
     logs.traces.push({ targetUrl })
     if (!targetUrl)
