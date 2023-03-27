@@ -28,9 +28,6 @@ class EventController {
     routingKey: string,
     payload: any
   ): Promise<boolean> {
-    await channel.assertExchange(exchange, 'direct', {
-      durable: true,
-    })
     return this.eventService.publishMessage(
       channel,
       exchange,
@@ -46,7 +43,6 @@ class EventController {
     routingKey: string,
     callback: (message: any) => void
   ): Promise<void> {
-    await channel.assertExchange(exchange, 'direct', { durable: true })
     await channel.assertQueue(queue, {
       durable: true,
     })
@@ -71,19 +67,31 @@ class EventController {
       queue,
       routingKey,
       message => {
+        logs.traces.push(message)
         this.handleEvents(message, logs)
+        console.log(message)
       }
     )
   }
 
   async handleEvents(payload: { event: string; data: any }, logs: Logs) {
     switch (payload.event) {
-      case Constants.EVENTS.ADD_TO_REDIRECT: {
-        logs.traces.push('Adding into Redirect Mapping')
-        this.eventService.addToRedirectMapping(
+      case Constants.EVENTS.CREATE_REPORT: {
+        logs.traces.push('Creating report')
+        await this.eventService.createReport(
           payload.data._id,
           payload.data.shortId,
           payload.data.targetUrl
+        )
+        logs.traces.push('Successful')
+        break
+      }
+      case Constants.EVENTS.ADD_TO_REPORT: {
+        logs.traces.push('Adding into report')
+        await this.eventService.addToReport(
+          payload.data.shortId,
+          payload.data.ipAddress,
+          payload.data.visitedAt
         )
         logs.traces.push('Successful')
         break

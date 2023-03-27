@@ -1,6 +1,7 @@
 import { Utils } from '../../utils'
 import amqplib from 'amqplib'
-import redirect_mappingModel from '../../database/model/redirect_mapping.model'
+import reportModel from '../../database/model/report.model'
+import geoip from 'geoip-lite'
 class EventService {
   publishMessage(
     channel: amqplib.Channel,
@@ -42,8 +43,31 @@ class EventService {
     })
   }
 
-  addToRedirectMapping(_id: string, shortId: string, targetUrl: string) {
-    return redirect_mappingModel.create({
+  addToReport(shortId: string, ipAddress: string, visitedAt: Date) {
+    const geo = geoip.lookup(ipAddress === '::1' ? '113.211.93.226' : '')
+    return reportModel.updateOne(
+      {
+        'urlMappings.shortId': shortId,
+      },
+      {
+        $push: {
+          reportDetails: {
+            visitedAt,
+            region: geo?.region,
+            country: geo?.country,
+            city: geo?.city,
+            longitude: geo?.ll[1],
+            latitude: geo?.ll[0],
+            timezone: geo?.timezone,
+            ipAddress,
+          },
+        },
+      }
+    )
+  }
+
+  createReport(_id: string, shortId: string, targetUrl: string) {
+    return reportModel.create({
       urlMappings: {
         _id,
         shortId,
