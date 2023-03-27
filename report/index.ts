@@ -19,10 +19,11 @@ async function main() {
   app.use('/', routes)
 
   const eventController = new EventController(config.messageBrokerUrl)
+
   eventController.handleIncomingMessages(
     config.exchange,
-    config.queue,
-    config.redirectRoutingKey
+    config.reportQueue,
+    config.reportRoutingKey
   )
 
   MongooseClient.connect(config.mongoDBString)
