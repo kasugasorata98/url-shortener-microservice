@@ -1,7 +1,6 @@
 import { Constants } from '../../constants'
 import ShortURLService from './shorturl.service'
 import { Logs } from '../../entities/logs.entity'
-import EventController from '../event/event.controller'
 import { config } from '../../configs'
 
 class ShortURLController {
@@ -33,15 +32,24 @@ class ShortURLController {
         shortId,
         this.targetUrl
       )
-      !this.isTest &&
-        (await this.shortUrlService.publishMessage({
+      if (!this.isTest) {
+        await this.shortUrlService.publishMessage(config.redirectRoutingKey, {
           event: Constants.EVENTS.ADD_TO_REDIRECT,
           data: {
             _id: shortUrlResponse._id,
             shortId: shortUrlResponse.shortId,
             targetUrl: shortUrlResponse.targetUrl,
           },
-        }))
+        })
+        await this.shortUrlService.publishMessage(config.reportRoutingKey, {
+          event: Constants.EVENTS.CREATE_REPORT,
+          data: {
+            _id: shortUrlResponse._id,
+            shortId: shortUrlResponse.shortId,
+            targetUrl: shortUrlResponse.targetUrl,
+          },
+        })
+      }
       logs.traces.push({
         shortUrlResponse,
       })

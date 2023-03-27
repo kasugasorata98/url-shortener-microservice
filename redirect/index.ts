@@ -21,7 +21,7 @@ async function main() {
   const eventController = new EventController(config.messageBrokerUrl)
   eventController.handleIncomingMessages(
     config.exchange,
-    config.queue,
+    config.redirectQueue,
     config.redirectRoutingKey
   )
 

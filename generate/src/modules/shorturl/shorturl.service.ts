@@ -32,19 +32,22 @@ class ShortURLService {
     return title
   }
 
-  async publishMessage(payload: {
-    event: string
-    data: {
-      _id: string
-      shortId: string
-      targetUrl: string
+  async publishMessage(
+    routingKey: string,
+    payload: {
+      event: string
+      data: {
+        _id: string
+        shortId: string
+        targetUrl: string
+      }
     }
-  }) {
+  ) {
     const publishChannel = await this.eventController.createChannel()
     this.eventController.publishMessage(
       publishChannel,
       config.exchange,
-      config.redirectRoutingKey,
+      routingKey,
       payload
     )
   }

@@ -28,9 +28,6 @@ class EventController {
     routingKey: string,
     payload: any
   ): Promise<boolean> {
-    await channel.assertExchange(exchange, 'direct', {
-      durable: true,
-    })
     return this.eventService.publishMessage(
       channel,
       exchange,
@@ -43,34 +40,37 @@ class EventController {
     channel: amqplib.Channel,
     exchange: string,
     queue: string,
-    routingKey: string,
+    bindingKey: string,
     callback: (message: any) => void
   ): Promise<void> {
     await channel.assertExchange(exchange, 'direct', { durable: true })
+
     await channel.assertQueue(queue, {
       durable: true,
     })
-    await channel.bindQueue(queue, exchange, routingKey)
+    await channel.bindQueue(queue, exchange, bindingKey)
     await channel.prefetch(1) // if we scale up, we dont want other receivers to receive the same thing
+    console.log({ bindingKey, queue, exchange })
     this.eventService.subscribeMessage(channel, queue, callback)
   }
 
   async handleIncomingMessages(
     exchange: string,
     queue: string,
-    routingKey: string
+    bindingKey: string
   ) {
     const logs = logger.createLogObject()
     logs.functionName = this.handleIncomingMessages.name
     logs.traces.push('Handling Incoming Message')
-    logs.traces.push({ exchange, queue, routingKey })
+    logs.traces.push({ exchange, queue })
     const consumeChannel = await this.createChannel()
     this.subscribeMessage(
       consumeChannel,
       exchange,
       queue,
-      routingKey,
+      bindingKey,
       message => {
+        logs.traces.push(message)
         this.handleEvents(message, logs)
       }
     )
